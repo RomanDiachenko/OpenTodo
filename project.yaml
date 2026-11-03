@@ -1,0 +1,40 @@
+# Qualinaut: what to test in this project and what to produce.
+version: 1  # the layout of this file; `qlt migrate` upgrades it
+name: "OpenTodo"
+
+targets:
+  - id: web  # the Go server with the web app it embeds, as a public demo instance
+    platform: web
+    url: "http://localhost:8080"
+    sandbox:
+      provider: process
+      command: "./bin/opentodo"
+      env:
+        OPENTODO_ADDR: "127.0.0.1:8080"
+        OPENTODO_DATA_DIR: ".qlt-tools/opentodo-data"
+        # A private sandbox of sample data per visitor ("Try the demo"): no account,
+        # no password, and the features a public server switches off stay off
+        OPENTODO_DEMO: "true"
+    # CI: the web app (embedded by the binary), then the server, as `make build` does
+    build:
+      command: "cd web && npm ci --no-audit --no-fund && npm run build && cd .. && CGO_ENABLED=0 go build -trimpath -o bin/opentodo ./cmd/opentodo"
+
+sources:
+  repos: ["."]  # source code: routes, guards, data access
+  docs: []
+  chats: []
+
+oracle:
+  type: requirements
+
+policy: intended
+
+pipeline:
+  goals: [test.results]
+  agents:
+    ui-explorer: {}
+    code-linker: {}
+    test-generator: {}
+  gates: []
+
+flows: {}

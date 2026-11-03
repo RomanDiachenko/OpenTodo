@@ -45,3 +45,7 @@ gosec.sarif
 /tmp/
 # extension-v2: written from extension/manifest.src.json for loading the folder unpacked
 /extension/manifest.json
+
+# Qualinaut
+.qlt/
+.qlt-tools/
