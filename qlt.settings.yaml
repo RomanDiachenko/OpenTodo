@@ -302,7 +302,12 @@ ui-explorer:
   # Regexes on route paths to leave out
   # deep_link_ignore: ["^/__"]
   # Sign-in steps to run before exploring (see auth.py)
-  # auth: null
+  # Sign in once, then every return keeps that browser session: each "Try the demo" makes
+  # a new sandbox of sample data, so clicking it again leads to another screen
+  auth:
+    steps:
+      - click: "Try the demo"
+      - wait_for: "Demo"
   # Git ref: re-explore only screens the changes since it touch (and new ones), carrying the
   # rest of the last exploration over; full when unclear
   # changed_since: null
